@@ -17,6 +17,6 @@ attribute :disk_piops,             :kind_of => Integer, :default => 0
 attribute :encrypted,              :default => nil
 attribute :encryption_passwd,      :default => nil
 attribute :dm_name,                :kind_of => String, :default => 'secure'
-
+attribute :hvm,                    :kind_of => [TrueClass, FalseClass], :default => false
 
 
