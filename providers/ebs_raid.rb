@@ -6,6 +6,10 @@ action :auto_attach do
     action :install
   end
 
+  package "xfsprogs" do
+    action :install
+  end
+
   if @new_resource.encrypted
     package "cryptsetup" do
       action :install
@@ -502,6 +506,8 @@ def create_raid_disks(mount_point, mount_point_owner, mount_point_group, mount_p
         case filesystem
           when "ext4"
             system("mke2fs -t #{filesystem} -F #{device}")
+          when "xfs"
+            system("mkfs.xfs -f #{device}")
           else
             #TODO fill in details on how to format other filesystems here
             Chef::Log.info("Can't format filesystem #{filesystem}")
