@@ -94,9 +94,9 @@ action :prune do
     if snapshot[:aws_volume_id] == vol[:aws_id]
       Chef::Log.info "Found old snapshot #{snapshot[:aws_id]} (#{snapshot[:aws_volume_id]}) #{snapshot[:aws_started_at]}"
       old_snapshots << snapshot
-    end 
+    end
   end
-  if old_snapshots.length > new_resource.snapshots_to_keep 
+  if old_snapshots.length > new_resource.snapshots_to_keep
     old_snapshots[new_resource.snapshots_to_keep, old_snapshots.length].each do |die|
       converge_by("delete snapshot with id: #{die[:aws_id]}") do
         Chef::Log.info "Deleting old snapshot #{die[:aws_id]}"
@@ -178,6 +178,7 @@ def create_volume(snapshot_id, size, availability_zone, timeout, volume_type, pi
     Timeout::timeout(timeout) do
       while true
         vol = volume_by_id(nv[:aws_id])
+        Chef::Log.info("ARNAUD: Volume #{vol} #{vol[:aws_status]}")
         if vol && vol[:aws_status] != "deleting"
           if ["in-use", "available"].include?(vol[:aws_status])
             Chef::Log.info("Volume #{nv[:aws_id]} is available")
